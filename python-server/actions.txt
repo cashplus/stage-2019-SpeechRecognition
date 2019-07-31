@@ -1,0 +1,11 @@
+Virement:
+    0- detection c'est un viremment.
+    1- demande de la somme souhaitée envoyer.
+    2- choisir entre ﺩﺭﻫﻢ et ﺭﻳﺎﻝ.
+    3- demande des informatios sur le destinataire (nom, prénom, id).
+
+recharge telephonique:
+    0- detection c'est une recharge telephonique.
+    1- demande de la somme souhaité recharger.
+    2- opérateur.
+    3- numéro de téléphone.
