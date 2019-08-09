@@ -6,7 +6,7 @@ import re
 from speech import *
 import json
 from flask import *
-
+import uuid
 
 
 class analyse():
@@ -17,37 +17,41 @@ class analyse():
         
     
     def onVirement(self):
+        virement = json.load(open('virement.json','r'))
+        if not virement['valid']:
+            missing = ''
+            if virement["properties"]['montant'] == '':
+                if re.search('\d+', self.text):
+                    montant = [int(s) for s in str.split(self.text) if s.isdigit()]
+                    virement["properties"]['montant'] = montant[0]
+                else:
+                    missing = missing+"montant " 
+
+            if virement["properties"]['type'] == '':
+                print("yes")
+                if "درهم" in self.text :
+                    virement["properties"]['type'] = 'DH'
+                elif "ﺭﻳﺎﻝ" in self.text:
+                    viremet["properties"]['type'] = 'CENTIME'
+                else:
+                    missing = missing+"type "
+            
+            if virement["properties"]['destinataire'] == '':
+                missing = missing+"destinataire"
+            
+            if missing == '':
+                virement['valid'] = True
+            else: 
+                virement["message"] = "the "+missing+" is missing"
+
+        return virement
+                
+
+            
+            
+
+
         
-        def etape3(montant):
-                print("étape actuelle: 2 --> étape suivante demande des informations sur le destinataire")
-                idDestinataire =  int(input("entrer l'id du destinataire: "))
-                return "virement de "+str(montant)+" dhs déstiner à "+str(idDestinataire)
-        
-        def etape2(montant):
-            print("étape actuelle: 1  --> étape suivante choisir entre ﺩﺭﻫﻢ et ﺭﻳﺎﻝ")
-            choixMonaie = int(input("choisir entre ﺩﺭﻫﻢ et ﺭﻳﺎﻝ : (entrer ﺩﺭﻫﻢ:0 ,ﺭﻳﺎﻝ:1): "))
-            if choixMonaie == 0 :
-                return etape3(montant)
-            elif choixMonaie == 1 :
-                return etape3(montant/20)
-            else:
-                return etape2(montant)
-        
-        def etape1():
-            print("étape actuelle: 0  --> étape suivante demande de la somme souhaitée envoyer")
-            somme = int(input("entrer la somme souhaitée envoyer: "))
-            return etape2(somme)
-        
-        if re.search('\d+', self.text):
-            montant = [int(s) for s in str.split(self.text) if s.isdigit()]
-            if "ﺩﺭﻫﻢ" in self.text or "ﺭﻳﺎﻝ" in self.text:
-                if "ﺭﻳﺎﻝ" in self.text :
-                    montant[0] = montant[0]/20
-                return etape3(montant[0])
-            else :                
-               return etape2(montant[0])
-        else : 
-            return etape1()
 
     def onRechargeTelephonique(self):
         def etape1():
@@ -123,13 +127,16 @@ class analyse():
 
 if __name__ == "__main__":
     app = Flask(__name__)
-    @app.route('/upload', methods=['post'])
-    def upload():
+    @app.route('/takeDecision', methods=['post'])
+
+    def takeDecision():
         text = request.args.get('text')
         print(text)
         analys = analyse(text)
         print(analys.takeDecision())
-        return text
+        return Response(response=json.dumps(analys.takeDecision()),status = 200,mimetype="application/json")
+    
+
 
     app.run(host='0.0.0.0',port='5000') 
 

@@ -1,0 +1,10 @@
+{
+    "action":"virement",
+    "properties": {
+        "montant":"",
+        "type":"",
+        "destinataire":""
+    },
+    "valid":false,
+    "message":""
+}

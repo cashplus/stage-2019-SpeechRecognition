@@ -3,22 +3,24 @@ import {Button, StyleSheet, Text, View,TouchableOpacity,Image} from 'react-nativ
 import {Audio} from 'expo-av';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
+import {createAppContainer, createStackNavigator} from 'react-navigation'
 import axios from 'axios';
+import Steps from "./Steps"
+import Summary from './Summary'
 
-export default class Speech extends React.Component {
+class Speech extends React.Component {
 
     constructor(props){
         super(props);
         this.recording=null;
         this. state = {
             isRecording:false,
-            transcription:null
+            transcription:null,
+            respForSteps:null
         }
         this.timeOut = null;
         
-        
     }
-
 
     startRecording = async () =>{
       const  RecordingOptions = {
@@ -118,12 +120,22 @@ export default class Speech extends React.Component {
   
                 // sending the transcript to python server
                 if (this.state.transcription != null) {
-                  serverUrl = "http://192.168.1.95:5000/upload?text="+this.state.transcription;
+                  serverUrl = "http://192.168.137.157:5000/takeDecision?text="+this.state.transcription;
                   axios.request({
                     url: serverUrl,
                     method:"POST"
                   }).then(response =>{
                     console.log("transcript send succesfull");
+                    this.setState({respForSteps: response.data.properties});
+                    resp = response.data.properties;
+                    console.log();
+                    if (!resp.valid){
+                      this.props.navigation.navigate("Steps",{
+                        respForSteps : resp,
+                        action: response.data.action
+                      })
+
+                    }
                   }).catch(err => {
                     console.log("err :", err);
                   });
@@ -158,6 +170,12 @@ export default class Speech extends React.Component {
 
 }
 
+const appNavigator = createStackNavigator({
+  Speech,
+  Steps,
+  Summary,
+});
+
 const styles = StyleSheet.create({
     start:{
         fontSize:20,
@@ -173,3 +191,5 @@ const styles = StyleSheet.create({
     marginBottom:70
   }
 });
+
+export default createAppContainer(appNavigator);
