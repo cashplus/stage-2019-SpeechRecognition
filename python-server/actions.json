@@ -1,0 +1,58 @@
+{
+    "modules":[
+        {
+            "action":"virement",
+            "keyWords":["نصيفط","ﺴﻴﻔﻂ","ﻧﺮﺳﻞ","ﺮﺳﻞ","ﻧﺴﺮﺩ","ﺴﺮﺩ","نسيفط","ارسل"],
+            "properties": {
+                "montant":{
+                    "rex":"[0-9]+",
+                    "value":""
+                },
+                "type":{
+                    "rex":"([Dd]hs?|DHS?|[Cc]entimes?|CENTIMES?S|درهم|ﺭﻳﺎﻝ)",
+                    "value":""
+                },
+                "destinataire":{
+                    "rex":"[0-9]+",
+                    "value":""
+                }
+            },
+            "valid":false
+        },
+        {
+            "action":"rechargeTelephonique",
+            "keyWords":["شارجي","نشارجي"],
+            "properties":{
+                "montant":{
+                    "rex":"[0-9]+[05]",
+                    "value":""
+                },
+                "numero":{
+                    "rex":"(\\+212|0)[5-7][0-9]{8}",
+                    "value":""
+                },
+                "operateur":{
+                    "rex":"([Oo]range|[Ii]nwi|[Ii]am|ORANGE|INWI|IAM)",
+                    "value":""
+                }
+            },
+            "valid":false
+        },
+        {
+            "action":"consultationPoints",
+            "keyWords":[],
+            "properties":{
+                
+            },
+            "valid":false
+        },
+        {
+            "action":"conversionPoint",
+            "keyWords":[],
+            "properties":{
+
+            },
+            "valid":false
+        }
+    ]
+}

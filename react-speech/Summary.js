@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, TextInput, Button, View} from 'react-native'
+import {Text, TextInput, Button, View,TouchableOpacity, StyleSheet} from 'react-native'
 
 export default class Summary extends React.Component{
 
@@ -14,7 +14,10 @@ export default class Summary extends React.Component{
     }
     summary = ()=>{
         if(this.state.action == "virement"){
-            this.state.summary ="virement de "+this.state.response.montant+" "+this.state.response.type+" destinée à "+this.state.response.destinataire
+            this.state.summary ="virement de "+this.state.response.montant.value+" "+this.state.response.type.value+" destinée à "+this.state.response.destinataire.value
+        }
+        else if(this.state.action == "rechargeTelephonique"){
+            this.state.summary = "recharge telephonique de "+this.state.response.montant.value+" Dhs d' "+this.state.response.operateur.value+" effectuée au numéro "+this.state.response.numero.value
         }
     }
 
@@ -28,11 +31,25 @@ export default class Summary extends React.Component{
     
     render(){
         return(
-            <View>
+            <View style={styles.container}>
                 <Text>{this.state.summary}</Text>
-                <Button title="confimer" onPress={this.confirm}/>
-                <Button title="annuler" onPress={this.annuler}/>
+                <TouchableOpacity style={styles.button} onPress={this.confirm}><Text>confirmer</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={this.annuler}><Text>annuler</Text></TouchableOpacity>
             </View>
         );
     }
 } 
+
+const styles = StyleSheet.create({
+    button:{
+        marginTop:20,
+        alignItems: 'center',
+        backgroundColor: '#DDDDDD',
+        padding: 10
+    },
+    container: {
+        flex: 1,
+        marginTop:70,
+        paddingHorizontal: 50
+    }
+})

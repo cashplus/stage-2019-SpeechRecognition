@@ -120,7 +120,7 @@ class Speech extends React.Component {
   
                 // sending the transcript to python server
                 if (this.state.transcription != null) {
-                  serverUrl = "http://192.168.137.157:5000/takeDecision?text="+this.state.transcription;
+                  serverUrl = "http://192.168.1.59:5000/takeDecision?text="+this.state.transcription;
                   axios.request({
                     url: serverUrl,
                     method:"POST"
@@ -128,13 +128,17 @@ class Speech extends React.Component {
                     console.log("transcript send succesfull");
                     this.setState({respForSteps: response.data.properties});
                     resp = response.data.properties;
-                    console.log();
-                    if (!resp.valid){
+                    if (!response.data.valid){
                       this.props.navigation.navigate("Steps",{
                         respForSteps : resp,
                         action: response.data.action
                       })
-
+                    }
+                    else {
+                      this.props.navigation.navigate("Summary",{
+                        action: response.data.action,
+                        response: resp
+                      })
                     }
                   }).catch(err => {
                     console.log("err :", err);

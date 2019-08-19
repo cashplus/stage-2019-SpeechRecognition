@@ -1,6 +1,6 @@
 {
-    "virement": ["نصيفط","ﺴﻴﻔﻂ","ﻧﺮﺳﻞ","ﺮﺳﻞ","ﻧﺴﺮﺩ","ﺴﺮﺩ","نسيفط"],
-    "rechargeTelephonique": ["شارجي"],
+    "virement": ["نصيفط","ﺴﻴﻔﻂ","ﻧﺮﺳﻞ","ﺮﺳﻞ","ﻧﺴﺮﺩ","ﺴﺮﺩ","نسيفط","ارسل"],
+    "rechargeTelephonique": ["شارجي","نشارجي"],
     "consultationPoint": [],
     "conversionPoint": [],
     "localisationAgence": [],
